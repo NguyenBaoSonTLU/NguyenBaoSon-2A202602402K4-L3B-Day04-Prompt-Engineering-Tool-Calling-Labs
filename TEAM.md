@@ -18,7 +18,7 @@
 
 - Họ tên: Nguyễn Bảo Sơn
 - MSSV: 2A202602402
-- GitHub username: NguyenBaorSonTLU 
+- GitHub username: NguyenBaoSonTLU 
 - Vai trò: Thực hiện prompt engineering, rà soát khai báo công cụ,
   chạy đánh giá, xây dựng UI và tổng hợp báo cáo.
 
