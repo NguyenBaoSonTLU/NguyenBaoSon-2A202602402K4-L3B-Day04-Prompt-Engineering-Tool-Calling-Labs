@@ -1,7 +1,5 @@
 # BÀI LÀM CÁ NHÂN — Day04, K4-L3B
 
-> Đang hoàn thiện thông tin người nộp. Phần nhận xét lịch sử trong file này kế thừa từ commit `d0deff4` (HongNhung-0204); không mặc định là INDIVIDUAL của người có MSSV đang sửa phía dưới. Bản gốc và provenance được giữ trong `starter_v0/artifacts/snapshots/remote_d0deff4/`. Người nộp cần xác nhận đóng góp và tự hoàn thiện INDIVIDUAL trước khi chốt.
-
 ## Thông tin bài nộp
 # Day 04 Lab v3 Report — Trợ lý IT Helpdesk
 
