@@ -1,0 +1,3 @@
+-r requirements.txt
+# Optional browser UI retained from the original submitted work.
+streamlit

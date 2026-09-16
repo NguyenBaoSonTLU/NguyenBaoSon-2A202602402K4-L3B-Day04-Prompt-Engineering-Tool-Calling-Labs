@@ -1,0 +1,259 @@
+{
+  "dataset_id": "day04_v3_helpdesk_group",
+  "dataset_role": "group",
+  "description": "Ten original IT helpdesk cases: 5 single-turn query cases and 5 multi-turn turns cases covering ambiguity, corrections, decision changes, cancellation, policy lookup, and confirmed ticket creation.",
+  "allowed_failure_types": [
+    "wrong_tool",
+    "wrong_arg_value",
+    "wrong_boundary",
+    "unnecessary_tool",
+    "out_of_scope",
+    "missing_info"
+  ],
+  "cases": [
+    {
+      "id": "G01_ambiguous_service_request",
+      "phase": "B",
+      "query": "Mình không vào được hệ thống, bạn kiểm tra giúp nhé.",
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": { "response_type": "text" }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "ambiguous_intent",
+        "difficulty": "medium",
+        "what_it_tests": "Yêu cầu chưa xác định dịch vụ, thiết bị hoặc loại sự cố nên agent phải hỏi lại thay vì tự chọn tool."
+      }
+    },
+    {
+      "id": "G02_ambiguous_environment",
+      "phase": "B",
+      "query": "Kiểm tra SSO trong môi trường sandbox của nhóm triển khai.",
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "choice",
+              "options": ["production", "staging"]
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "ambiguous_environment",
+        "difficulty": "medium",
+        "what_it_tests": "Sandbox không phải enum hợp lệ; agent phải hỏi người dùng chọn production hoặc staging."
+      }
+    },
+    {
+      "id": "G03_external_tools_policy_lookup",
+      "phase": "B",
+      "query": "Chính sách nào quy định việc dùng công cụ bên ngoài khi xử lý dữ liệu sự cố?",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "policy",
+            "args": { "policy_area": "external_tools" }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "policy_lookup",
+        "difficulty": "medium",
+        "what_it_tests": "Yêu cầu chính sách phải dùng policy tool và chọn đúng policy area external_tools."
+      }
+    },
+    {
+      "id": "G04_compare_service_environments",
+      "phase": "B",
+      "query": "Đối chiếu trạng thái Wi-Fi production và staging của văn phòng Bangkok.",
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_service_status",
+            "args": { "service": "wifi", "environment": "production" }
+          },
+          {
+            "name": "check_service_status",
+            "args": { "service": "wifi", "environment": "staging" }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "parallel_environment_comparison",
+        "difficulty": "hard",
+        "what_it_tests": "Cùng một service nhưng phải gọi đủ hai lần với hai environment, không được bỏ sót hoặc gộp argument."
+      }
+    },
+    {
+      "id": "G05_ticket_requires_confirmation",
+      "phase": "B",
+      "query": "Tạo ticket mức high cho máy in PR-404 bị kẹt hàng loạt.",
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": { "response_type": "yes_no" }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "ticket_confirmation",
+        "difficulty": "medium",
+        "what_it_tests": "Yêu cầu tạo ticket chưa phải confirmation; agent phải hỏi xác nhận trước và chưa gọi create_ticket."
+      }
+    },
+    {
+      "id": "G06_corrected_device_code",
+      "phase": "B",
+      "turns": [
+        { "role": "user", "content": "Kiểm tra phần cứng máy DT-087." },
+        { "role": "user", "content": "Mình nhập nhầm, mã đúng là DT-031." },
+        { "role": "user", "content": "Chỉ kiểm tra hardware của mã đúng đó." }
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "inspect_device",
+            "args": { "asset_id": "DT-031", "check": "hardware" }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_device_correction",
+        "difficulty": "hard",
+        "what_it_tests": "Mã thiết bị ở lượt mới nhất thay thế mã cũ và check hardware phải được giữ lại."
+      }
+    },
+    {
+      "id": "G07_changed_decision_to_kb",
+      "phase": "B",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Kiểm tra trạng thái printing production."
+        },
+        {
+          "role": "user",
+          "content": "Không cần xem status nữa, tìm hướng dẫn xử lý queue máy in."
+        },
+        { "role": "user", "content": "Chỉ lấy bài trong nhóm printing." }
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "search_kb",
+            "args": { "category": "printing" }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_intent_switch",
+        "difficulty": "hard",
+        "what_it_tests": "Ý định mới tìm hướng dẫn thay thế yêu cầu status cũ; không được gọi lại check_service_status."
+      }
+    },
+    {
+      "id": "G08_cancel_ticket_creation",
+      "phase": "B",
+      "turns": [
+        { "role": "user", "content": "Tạo ticket lỗi máy in PR-404 mức high." },
+        { "role": "user", "content": "Đổi summary thành máy in tầng 2." },
+        { "role": "user", "content": "Dừng lại, không tạo ticket nữa." }
+      ],
+      "failure_type": "unnecessary_tool",
+      "expect": { "no_tool": true },
+      "metadata": {
+        "skill": "multiturn_cancellation",
+        "difficulty": "hard",
+        "what_it_tests": "Lượt hủy mới nhất thắng mọi yêu cầu tạo ticket trước đó; không gọi clarify hoặc create_ticket."
+      }
+    },
+    {
+      "id": "G09_policy_then_confirmed_ticket",
+      "phase": "B",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tra cứu policy ticketing về việc tạo ticket khi VPN certificate sắp hết hạn."
+        },
+        {
+          "role": "user",
+          "content": "Sau khi xem policy, tôi muốn tạo ticket cho LT-318 mức high."
+        },
+        {
+          "role": "user",
+          "content": "Tôi xác nhận payload: summary 'VPN certificate sắp hết hạn', priority high, asset LT-318. Hãy tạo ticket."
+        }
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "create_ticket",
+            "args": {
+              "summary": "VPN certificate sắp hết hạn",
+              "priority": "high",
+              "asset_id": "LT-318",
+              "confirmed": true
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "policy_to_confirmed_action",
+        "difficulty": "hard",
+        "what_it_tests": "Sau khi policy đã được xem, chỉ tạo ticket ở lượt có confirmation rõ ràng cho đúng summary, priority và asset ID."
+      }
+    },
+    {
+      "id": "G10_changed_ticket_priority",
+      "phase": "B",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tạo ticket lỗi VPN trên LT-240 mức medium."
+        },
+        {
+          "role": "user",
+          "content": "Đổi mức ưu tiên thành critical vì ảnh hưởng nhiều người."
+        },
+        {
+          "role": "user",
+          "content": "Tôi xác nhận tạo ticket mới với priority critical cho LT-240."
+        }
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "create_ticket",
+            "args": {
+              "summary": "Lỗi VPN trên LT-240",
+              "priority": "critical",
+              "asset_id": "LT-240",
+              "confirmed": true
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_payload_update",
+        "difficulty": "hard",
+        "what_it_tests": "Priority mới nhất phải thắng priority cũ và confirmation phải áp dụng cho payload mới."
+      }
+    }
+  ]
+}

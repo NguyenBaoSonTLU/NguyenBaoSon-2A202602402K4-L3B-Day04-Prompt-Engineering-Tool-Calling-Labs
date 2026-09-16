@@ -1,28 +1,17 @@
 # BÀI LÀM CÁ NHÂN — Day04, K4-L3B
 
-> Đang hoàn thiện thông tin người nộp. Phần nhận xét lịch sử trong file này kế thừa từ commit `d0deff4` (HongNhung-0204); không mặc định là INDIVIDUAL của người có MSSV đang sửa phía dưới. Bản gốc và provenance được giữ trong `starter_v0/artifacts/snapshots/remote_d0deff4/`. Người nộp cần xác nhận đóng góp và tự hoàn thiện INDIVIDUAL trước khi chốt.
-
 ## Thông tin bài nộp
-# Day 04 Lab v3 Report — Trợ lý IT Helpdesk
 
-- Lĩnh vực tự chọn: IT Helpdesk, sử dụng dữ liệu công ty giả lập.
-- Nhiệm vụ và luồng cơ bản đã chốt trước v0:
-  Tiếp nhận yêu cầu hỗ trợ IT; kiểm tra tình trạng dịch vụ, thiết bị,
-  tra cứu hướng dẫn và thông tin nhân viên bằng công cụ phù hợp.
-  Hỏi lại khi thiếu thông tin; chỉ tạo ticket sau khi người dùng
-  xác nhận rõ ràng; cập nhật hoặc hủy thao tác theo yêu cầu mới nhất.
-- Đường dẫn bộ 30 câu cơ bản: starter_v0/data/eval_base.json.
-- Đường dẫn bộ 12 câu an toàn: [đường dẫn thực tế].
-- Commit chốt bộ trước v0: [commit hash thực tế].
-- Chức năng mở rộng ngoài luồng cơ bản: [ghi chức năng hoặc “Không có”].
-
-## Cá nhân
-
-- Họ tên: Nguyễn Bảo Sơn
-- MSSV: 2A202602402
-- GitHub username: NguyenBaorSonTLU 
-- Vai trò: Thực hiện prompt engineering, rà soát khai báo công cụ,
-  chạy đánh giá, xây dựng UI và tổng hợp báo cáo.
+- Họ và tên: Nguyễn Thị Hồng Nhung
+- MSSV: 2A202602557
+- Hình thức: Bài làm cá nhân
+- Lĩnh vực: IT Helpdesk
+- Tên repo: K4-L3-DAY04-NguyenThiHongNhung-2A202602557-PromptEngineeringToolCalling`
+- GitHub: HongNhung-0204
+- URL repo:https://github.com/HongNhung-0204/K4-L3-DAY04-NguyenThiHongNhung-2A202602557-PromptEngineeringToolCalling.git
+- Nhánh nộp: main
+- Commit chốt: feat: finalize Day04 IT helpdesk agent and evaluation evidence
+- Provider/model: OpenAI / `gpt-4o-mini`
 
 ## Tổng quan bài làm
 
@@ -30,7 +19,7 @@ Xây dựng trợ lý IT Helpdesk dùng dữ liệu công ty giả lập. Agent 
 
 Các tool chính gồm `clarify`, `search_kb`, `check_service_status`, `inspect_device`, `lookup_user`, `format_incident_report`, `policy`, `create_ticket` và `search_device_info`.
 
-## Kết quả và bằng chứng lịch sử từ commit d0deff4
+## Kết quả và bằng chứng
 
 - Bộ base v3: **30/30 case, đạt 100%**, `provider_error_cases=0`, `measured_cases=30`.
 - Tiến triển qua các phiên bản: v0 đạt 21/30 (70%); v1 đạt 29/30 (96,67%); v2 đạt 29/30 (96,67%); v3 đạt 30/30 (100%).
@@ -84,7 +73,7 @@ Evidence chính:
 - Git/GitHub: quản lý source, evidence và lịch sử thay đổi.
 - Cách kiểm tra: đối chiếu `provider_error_cases`/`measured_cases`, đọc tool arguments và tool results, kiểm tra transcript và rà soát side effect trên filesystem.
 
-## Tự đánh giá kế thừa — cần người nộp xác nhận hoặc viết lại
+## Tự đánh giá
 
 - Thay đổi hiệu quả nhất: bổ sung quy tắc routing/clarify trong prompt và bắt buộc `search_kb.category`; kết quả base tăng từ 70% ở v0 lên 100% ở v3.
 - Điểm còn có thể cải thiện: xác nhận phải được ràng buộc ở tầng application/orchestrator; cần sửa ba nhóm lỗi adversarial còn lại và cải thiện các case G01, G03, G10.

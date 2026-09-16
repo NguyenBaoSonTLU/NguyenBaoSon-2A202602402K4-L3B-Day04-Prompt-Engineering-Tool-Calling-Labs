@@ -8,7 +8,9 @@ Trợ lý hỗ trợ trạng thái dịch vụ, chẩn đoán thiết bị, tài
 
 Giữ bộ gốc [base 30 case](../data/eval_base.json), [adversarial 12 case](../data/eval_adversarial.json) và extension. Bộ nhóm [eval_group.json](../data/eval_group.json) có đúng 5 case `query` và 5 case `turns`. Commit starter `311580e` chứa bộ gốc trước các run lưu ngày 2026-09-15. Không có bằng chứng xác nhận ngày nhóm tự chốt luồng/bộ case, nên không suy diễn thời điểm đó từ file.
 
-Phần kỹ thuật có code, 9 run thật, 7 transcript thật, version log, phân tích và hướng dẫn chạy. **Chưa thể tuyên bố bài đã nộp hoàn chỉnh**: thông tin thành viên, MSSV, INDIVIDUAL tự viết, lịch sử giả thuyết v1/v2 và xác nhận nộp VLearn còn cần người học cung cấp. Xem [TEAM.md](../../TEAM.md).
+Sau khi fetch GitHub, phát hiện commit `d0deff4` của HongNhung-0204 có bài cá nhân và một chuỗi run khác. Đã bảo tồn artifact/báo cáo gốc trong [snapshot remote](snapshots/remote_d0deff4/provenance.json) và tích hợp phần kỹ thuật. Tổng cộng có **17 run JSON (16 đủ điều kiện đo, 1 lỗi provider loại khỏi so sánh)** và **8 transcript (7 mới + 1 kế thừa)**. Không gộp hai chuỗi chỉ vì cùng nhãn v0–v3; không mặc định tác giả remote là người đang hoàn thiện bài.
+
+Thông tin người nộp trong [TEAM.md](../../TEAM.md) đang được chỉnh sửa và cần xác nhận họ tên/GitHub/đóng góp/INDIVIDUAL. Cũng cần đối chiếu tên repo, deadline và URL/commit trên VLearn. `SUBMISSION.md` của commit remote đã đánh dấu nộp, nhưng phiên này không đăng nhập VLearn và không xác minh được trạng thái đó cho người nộp hiện tại.
 
 ## A1. Cách chạy và giới hạn
 
@@ -48,7 +50,22 @@ Demo được chạy bằng callback UI thật, cửa sổ Tk ẩn, với model 
 
 ## B1. Version evidence và phương pháp
 
-Tất cả run dùng OpenAI / `gpt-4o-mini`, `temperature=0.0`, phase B, cùng bộ gốc cho các phép so sánh base. Có 30/30 case được đo trong mỗi run base và không có provider error. Script [index_evidence.py](../scripts/index_evidence.py) tính lại summary từ từng result và kiểm tra khớp số liệu đã lưu.
+Các run hợp lệ dùng OpenAI / `gpt-4o-mini`, `temperature=0.0`, phase B, cùng bộ gốc cho phép so sánh base. Riêng run OpenRouter lỗi được nêu dưới đây và không dùng làm điểm. Script [index_evidence.py](../scripts/index_evidence.py) tính lại summary từ từng result; index có `series`, `valid_measurement` và fingerprint của input/expect để phân biệt bộ test.
+
+### Chuỗi đã commit trên GitHub (`series=remote_d0deff4`)
+
+- [v0: 21/30 = 70%](../runs/v0_B_base_openai_20260915T185918096435.json), baseline.
+- [v1: 29/30 = 96,67%](../runs/v1_B_base_openai_20260915T195033048142.json), theo log gốc: thêm routing/clarify/arguments/confirmation; giả thuyết giảm lỗi chọn tool, thông tin thiếu và boundary.
+- [v2: 29/30 = 96,67%](../runs/v2_B_base_openai_20260915T195822479817.json), thêm trust boundary/chống injection; giả thuyết không làm giảm base được hỗ trợ, không chứng minh an toàn tuyệt đối.
+- [v3: 30/30 = 100%](../runs/v3_B_base_openai_20260915T201001847232.json), bắt buộc category và mapping Outlook/email, Wi-Fi, VPN trong declaration; sửa H03 theo log.
+- [Group cũ 7/10](../runs/v3_B_group_openai_20260915T202222480947.json), [safety 6/12](../runs/v3_B_adversarial_openai_20260915T202527466754.json), [extension 5/10](../runs/v3_B_extension_openai_20260915T202407955103.json). Group này dùng [case snapshot riêng](snapshots/remote_d0deff4/eval_group.json), khác bộ 5+5 đang hoạt động; không lấy 7/10 → 9/10 làm mức cải thiện cùng bộ.
+- [v0 OpenRouter lỗi](../runs/v0_B_base_openrouter_20260915T185649567284.json): measured=0, provider_errors=30; giữ để giải thích preflight/provider nhưng **loại khỏi điểm và so sánh**.
+
+[Version log gốc](snapshots/remote_d0deff4/version_log.csv) và [báo cáo gốc](snapshots/remote_d0deff4/REPORT.md) được giữ nguyên từ Git. Prompt cuối remote khớp v2/v3, declaration khớp v3; v1 chưa có snapshot nguyên bản. Các giả thuyết trên là ghi chép đã commit, không phải suy diễn từ các run local bên dưới.
+
+### Chuỗi local và lượt hoàn thiện (`series=local_completion`)
+
+Các run base dưới đây đều đo đủ 30 case, không lỗi provider. Đây là chuỗi có sẵn trong workspace trước khi fetch remote, khác chuỗi phía trên.
 
 - [v0 base](../runs/v0_B_base_openai_20260915T195750027709.json): **21/30 = 70%**; routing 76,67%, multi-turn 80%. Prompt starter được khôi phục từ Git, hash khớp run; xem [snapshot v0](snapshots/v0/system_prompt.md).
 - [v1 base](../runs/v1_B_base_openai_20260915T200859664606.json): **23/30 = 76,67%**, tăng 6,67 điểm phần trăm; routing 86,67%, multi-turn 90%. Prompt hash thay đổi, tools hash giữ nguyên. Không có snapshot/nhật ký để xác nhận nội dung sửa và giả thuyết ban đầu.
@@ -58,7 +75,7 @@ Tất cả run dùng OpenAI / `gpt-4o-mini`, `temperature=0.0`, phase B, cùng b
 
 v4 có [giả thuyết ghi trước sửa](../analysis/experiment_v4.md): đặt quy tắc nguồn xác nhận rõ hơn và cải thiện mô tả công cụ để giảm lỗi ranh giới/scope. Group **9/10 → 9/10**; adversarial **6/12 → 9/12**. Hypothesis được hỗ trợ ở an toàn, chưa được hỗ trợ ở scope G07; sửa đồng thời prompt và declaration nên không tách được đóng góp riêng của từng phần.
 
-Xem [version_log.csv](version_log.csv), [run_summary.csv](../analysis/run_summary.csv), [evidence_index.json](../analysis/evidence_index.json) và [tool_result_review.json](../analysis/tool_result_review.json). Các dòng lịch sử không có tác giả/giả thuyết được ghi rõ chưa xác minh, không bịa lại. v0–v3 là file sẵn có khi bắt đầu hoàn thiện; v3 group/adversarial và toàn bộ v4 được chạy mới trong phiên hoàn thiện.
+Xem [version_log.csv](version_log.csv), [run_summary.csv](../analysis/run_summary.csv), [evidence_index.json](../analysis/evidence_index.json) và [tool_result_review.json](../analysis/tool_result_review.json). Cột `series` giữ hai lịch sử riêng. Những dòng local thiếu tác giả/giả thuyết ghi chưa xác minh; log remote có ghi chép gốc. v3 group/adversarial local và toàn bộ v4 được chạy mới trong phiên hoàn thiện. So với base tốt nhất remote v3, v4 giảm từ 30/30 xuống 28/30; không tuyên bố cải thiện toàn diện.
 
 Lệnh tái lập bản cuối (từ `starter_v0/`):
 
@@ -143,13 +160,12 @@ Nếu có vòng tiếp theo: thử tách ticket draft/confirm thành state machi
 - [x] Source của ứng dụng ở `starter_v0/`; README có lệnh chạy.
 - [x] Prompt/tool declaration cuối khớp registry; snapshot v0/v3 và hash evidence được giữ.
 - [x] Có run base v0–v3 và bổ sung v4; version log có metric trước/sau và đường dẫn thật.
-- [ ] Xác minh giả thuyết/snapshot v1–v2 với người thực hiện ban đầu.
+- [x] Giữ giả thuyết v0–v3 của chuỗi đã commit; ghi rõ snapshot/ghi chú lịch sử nào còn thiếu ở từng chuỗi.
 - [x] Đúng 5+5 case nhóm, run group và run adversarial, phân tích nhiều hơn 3 safety case.
 - [x] UI có callback chạy thật, tool/input/result/error/version và 7 transcript yêu cầu.
 - [x] Báo cáo ghi cả kết quả đạt và giới hạn; không dùng sample làm evidence.
 - [ ] Họ tên, MSSV, GitHub, vai trò; nhận xét và INDIVIDUAL của từng người đã được chính người đó xác nhận.
-- [ ] Mỗi thành viên có commit kỹ thuật thực; không thay bằng commit giả danh.
+- [ ] Xác nhận đóng góp từng người; có commit remote d0deff4 và commit hỗ trợ 6b541a2, không tự coi là cùng một người thực hiện.
 - [ ] Xác nhận tên repo theo họ tên/MSSV người đại diện, quyền truy cập người chấm và deadline.
 - [ ] Chốt URL/commit nộp và từng thành viên tự nộp VLearn, mở lại xác nhận.
 
-Remote hiện cấu hình: https://github.com/HongNhung-0204/K4-L3-DAY04-HayUongNuoc-PromptEngineeringToolCalling. Chưa coi tên nhóm trong URL là họ tên/MSSV hợp lệ. Tình trạng Git và kiểm tra file được ghi tại [submission_check.json](../analysis/submission_check.json); các bước cá nhân chưa hoàn thành không được tự đánh dấu.

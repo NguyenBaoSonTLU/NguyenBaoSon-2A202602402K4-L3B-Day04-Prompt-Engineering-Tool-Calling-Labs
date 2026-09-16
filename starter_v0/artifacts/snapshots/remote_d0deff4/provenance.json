@@ -1,0 +1,11 @@
+{
+  "source_commit": "d0deff4972e1b4cfec221ce66fc16d8105cb051c",
+  "paths": {
+    "TEAM.md": "TEAM.md",
+    "REPORT.md": "starter_v0/artifacts/REPORT.md",
+    "system_prompt.md": "starter_v0/artifacts/system_prompt.md",
+    "tools.yaml": "starter_v0/artifacts/tools.yaml",
+    "version_log.csv": "starter_v0/artifacts/version_log.csv",
+    "eval_group.json": "starter_v0/data/eval_group.json"
+  }
+}

@@ -30,7 +30,7 @@ def main():
     group = json.loads((ROOT / "data/eval_group.json").read_text(encoding="utf-8"))["cases"]
     group_valid = len(group) == len({c["id"] for c in group}) == 10 and sum("query" in c for c in group) == sum("turns" in c for c in group) == 5
     fixed = ["starter_v0/data/eval_base.json", "starter_v0/data/eval_adversarial.json", "starter_v0/data/eval_helpdesk_extension.json"]
-    fixed_unchanged = not git("diff", "HEAD", "--", *fixed)
+    fixed_unchanged = not git("diff", "311580e", "--", *fixed)
     hashes = {name: hashlib.sha256((ROOT / "artifacts" / name).read_bytes()).hexdigest() for name in ["system_prompt.md", "tools.yaml"]}
     final_runs = [json.loads(p.read_text(encoding="utf-8")) for p in sorted((ROOT / "runs").glob("v4_*.json"))]
     final_match = len(final_runs) >= 3 and all(r["prompt_hash"] == hashes["system_prompt.md"] and r["tools_hash"] == hashes["tools.yaml"] for r in final_runs)
@@ -64,9 +64,8 @@ def main():
                              "python_syntax_ok": not syntax_errors},
         "forbidden_files": forbidden, "secret_file_paths_only": secret_files, "syntax_errors": syntax_errors,
         "secret_scan_scope": "Git tracked + eligible untracked text; compare configured API key/token values and OpenAI-like key pattern. Synthetic adversarial fixtures are not real credentials. Not a guarantee against every possible secret format.",
-        "human_items_pending": ["Confirmed member names, student IDs, roles and individual reflections",
-                               "Original v1/v2 hypothesis notes or snapshots",
-                               "Repository naming/access, applicable deadline and VLearn submission confirmation"],
+        "human_items_pending": ["Confirm the inherited TEAM.md identity/reflection still describes the submitter",
+                               "Repository naming and applicable deadline; VLearn submission is reported in inherited SUBMISSION.md but not independently verified in this session"],
     }
     out = ROOT / "analysis/submission_check.json"
     out.parent.mkdir(exist_ok=True)

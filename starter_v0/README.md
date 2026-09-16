@@ -40,10 +40,14 @@ Chạy riêng bộ nhóm:
 
 ## Evidence
 
-- `runs/`: 4 run base lịch sử v0–v3, 2 run v3 bổ sung, 3 run v4.
-- `transcripts/`: 7 hội thoại UI thật; `samples/` chỉ là định dạng mẫu.
+- `runs/`: 17 run thuộc hai chuỗi độc lập, phân biệt bằng `series` trong index/log; 16 đủ điều kiện đo và 1 OpenRouter lỗi bị loại khỏi so sánh. Có 3 run v4 mới.
+- `transcripts/`: 7 hội thoại UI mới và 1 transcript kế thừa; `samples/` chỉ là định dạng mẫu.
 - `analysis/`: kiểm kê ticket trước/sau, kết quả UI, unit test, run index và phân tích lỗi.
-- `artifacts/snapshots/`: prompt/tools v0 và v3 có hash khớp run; thiếu bản v1/v2 được nêu rõ trong báo cáo.
+- `artifacts/snapshots/`: prompt/tools v0 và v3 local có hash khớp run; `remote_d0deff4` lưu artifact, case, version log và báo cáo gốc từ GitHub. Những bản lịch sử thiếu được nêu rõ trong báo cáo.
 - `artifacts/version_log.csv`: kết quả có thể đối chiếu; không bịa giả thuyết lịch sử chưa biết.
 
 Nếu gặp `ModuleNotFoundError: yaml`, hãy dùng Python trong `.venv` hoặc cài `requirements.txt` vào đúng Python đang chạy. Nếu gặp lỗi API, kiểm tra key/provider và preflight; không đăng key lên chat hoặc Git.
+
+## UI web có sẵn trên remote
+
+`app.py` và ảnh `../image.png` được giữ từ commit d0deff4. Cài `requirements-ui.txt`, rồi chạy `python -m streamlit run starter_v0/app.py` từ thư mục gốc. Label version đã được cập nhật theo artifact v4. UI web gốc chưa có chức năng lưu transcript như `ui.py`; các transcript mới được thu thập bằng UI Tkinter đã kiểm tra ở trên. Ảnh cũ không được dùng làm ảnh xác minh v4.
