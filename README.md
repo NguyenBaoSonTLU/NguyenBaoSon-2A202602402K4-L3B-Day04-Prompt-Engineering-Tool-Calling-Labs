@@ -1,5 +1,10 @@
 # Day04 — Prompt Engineering & Tool Calling
 
+**Chạy UI của nhóm:** `./starter_v0/.venv/Scripts/python.exe starter_v0/ui.py`.
+Xem [hướng dẫn cài đặt/chạy và kiểm tra](starter_v0/README.md),
+[báo cáo kết quả thật](starter_v0/artifacts/REPORT.md) và [thông tin bài nộp](TEAM.md).
+Bản hoàn thiện kỹ thuật hiện tại là v4, bổ sung sau các run v0–v3; các mục cá nhân còn thiếu được ghi rõ trong báo cáo.
+
 **Làm nhóm · K4 Level 3B · Trợ lý AI theo lĩnh vực tự chọn.** Mỗi thành viên tự nộp cùng URL repo nhóm trên VLearn. Repo bài nộp dùng tên `K4-L3-DAY04-HoVaTen-MSSV-PromptEngineeringToolCalling`; khai báo thành viên và đóng góp trong [TEAM.md](TEAM.md).
 
 ## Bài lab này làm gì?

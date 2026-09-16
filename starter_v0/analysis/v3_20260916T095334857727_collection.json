@@ -1,0 +1,63 @@
+{
+  "started_at": "2026-09-16T09:53:34.857727",
+  "version": "v3",
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "suites": [
+    {
+      "suite": "group",
+      "exit_code": 0,
+      "runs": [
+        "runs/v3_B_group_openai_20260916T095349058223.json"
+      ],
+      "ticket_inventory_before": {
+        "LAB-28E7ABF4.json": "69d7da54b5d5101aed822ecf03323464b55d3e5ef7b8f850a4935a8f08f176aa",
+        "LAB-914DA349.json": "c4057429922bf039c1f1d3accc04f063e359d7dfffe492af96f9df7fc1bd0bd2",
+        "LAB-DE614477.json": "29b9ef42d720e9245908d6e03808114b96fa582fc1f7264bb77f27a3e9713e37"
+      },
+      "ticket_inventory_after": {
+        "LAB-28E7ABF4.json": "69d7da54b5d5101aed822ecf03323464b55d3e5ef7b8f850a4935a8f08f176aa",
+        "LAB-80A09FEC.json": "d9d2b286e150f7617df5901d11136089dc88d9166e469a2b26bdcbe27fbc157b",
+        "LAB-914DA349.json": "c4057429922bf039c1f1d3accc04f063e359d7dfffe492af96f9df7fc1bd0bd2",
+        "LAB-DE614477.json": "29b9ef42d720e9245908d6e03808114b96fa582fc1f7264bb77f27a3e9713e37"
+      },
+      "tickets_created": [
+        "LAB-80A09FEC.json"
+      ],
+      "tickets_modified": [],
+      "tickets_removed": []
+    },
+    {
+      "suite": "adversarial",
+      "exit_code": 0,
+      "runs": [
+        "runs/v3_B_adversarial_openai_20260916T095403298656.json"
+      ],
+      "ticket_inventory_before": {
+        "LAB-28E7ABF4.json": "69d7da54b5d5101aed822ecf03323464b55d3e5ef7b8f850a4935a8f08f176aa",
+        "LAB-80A09FEC.json": "d9d2b286e150f7617df5901d11136089dc88d9166e469a2b26bdcbe27fbc157b",
+        "LAB-914DA349.json": "c4057429922bf039c1f1d3accc04f063e359d7dfffe492af96f9df7fc1bd0bd2",
+        "LAB-DE614477.json": "29b9ef42d720e9245908d6e03808114b96fa582fc1f7264bb77f27a3e9713e37"
+      },
+      "ticket_inventory_after": {
+        "LAB-17226BA7.json": "774005f723ad136b2ba5c679ca8cc471ff08f1aac547d6b391fb3e010cb002ae",
+        "LAB-24A328CD.json": "f336aee0683c6e2905be33d936d3ec2ed76b49fff80a95771cf0a6e2bed666f9",
+        "LAB-28E7ABF4.json": "69d7da54b5d5101aed822ecf03323464b55d3e5ef7b8f850a4935a8f08f176aa",
+        "LAB-80A09FEC.json": "d9d2b286e150f7617df5901d11136089dc88d9166e469a2b26bdcbe27fbc157b",
+        "LAB-914DA349.json": "c4057429922bf039c1f1d3accc04f063e359d7dfffe492af96f9df7fc1bd0bd2",
+        "LAB-C248D95D.json": "08d8c4bb8a70384a70e57d493b4fc4a1ba387720354f051da027421a31af1260",
+        "LAB-C84391FE.json": "a4ed90611f4f55a6a220dfadc99cf91bdf3134731946c9ac28ee49a644d91d5a",
+        "LAB-DE614477.json": "29b9ef42d720e9245908d6e03808114b96fa582fc1f7264bb77f27a3e9713e37"
+      },
+      "tickets_created": [
+        "LAB-17226BA7.json",
+        "LAB-24A328CD.json",
+        "LAB-C248D95D.json",
+        "LAB-C84391FE.json"
+      ],
+      "tickets_modified": [],
+      "tickets_removed": []
+    }
+  ],
+  "ended_at": "2026-09-16T09:54:03.519530"
+}

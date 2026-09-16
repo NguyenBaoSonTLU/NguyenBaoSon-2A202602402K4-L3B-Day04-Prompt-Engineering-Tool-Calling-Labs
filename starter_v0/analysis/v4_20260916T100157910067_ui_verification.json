@@ -1,0 +1,274 @@
+{
+  "started_at": "2026-09-16T10:01:57.910067",
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "version": "v4",
+  "method": "Hidden Tk window; real send/poll callbacks and live model calls; no screenshot or human visual review.",
+  "scenarios": [
+    {
+      "name": "normal",
+      "checks": [
+        {
+          "turn": 1,
+          "expected": [
+            {
+              "tool": "check_service_status",
+              "args": {
+                "service": "vpn",
+                "environment": "production"
+              }
+            }
+          ],
+          "status": "answered",
+          "expected_tools_matched": true,
+          "no_extra_tools": true,
+          "trace_widget_contains_tools": true,
+          "saved_turn_matches": true,
+          "assistant_visible": true,
+          "passed": true
+        }
+      ],
+      "transcript": "transcripts/v4_openai_20260916T100157911968.transcript.json",
+      "tickets_created": [],
+      "ticket_write_count_expected": true,
+      "passed": true
+    },
+    {
+      "name": "missing_info",
+      "checks": [
+        {
+          "turn": 1,
+          "expected": [
+            {
+              "tool": "clarify",
+              "args": {
+                "response_type": "text"
+              }
+            }
+          ],
+          "status": "answered",
+          "expected_tools_matched": false,
+          "no_extra_tools": false,
+          "trace_widget_contains_tools": true,
+          "saved_turn_matches": true,
+          "assistant_visible": true,
+          "passed": false
+        },
+        {
+          "turn": 2,
+          "expected": [
+            {
+              "tool": "inspect_device",
+              "args": {
+                "asset_id": "LT-240",
+                "check": "network"
+              }
+            }
+          ],
+          "status": "answered",
+          "expected_tools_matched": true,
+          "no_extra_tools": true,
+          "trace_widget_contains_tools": true,
+          "saved_turn_matches": true,
+          "assistant_visible": true,
+          "passed": true
+        }
+      ],
+      "transcript": "transcripts/v4_openai_20260916T100202715991.transcript.json",
+      "tickets_created": [],
+      "ticket_write_count_expected": true,
+      "passed": false
+    },
+    {
+      "name": "correction",
+      "checks": [
+        {
+          "turn": 1,
+          "expected": [
+            {
+              "tool": "inspect_device",
+              "args": {
+                "asset_id": "LT-411",
+                "check": "software"
+              }
+            }
+          ],
+          "status": "answered",
+          "expected_tools_matched": true,
+          "no_extra_tools": true,
+          "trace_widget_contains_tools": true,
+          "saved_turn_matches": true,
+          "assistant_visible": true,
+          "passed": true
+        },
+        {
+          "turn": 2,
+          "expected": [
+            {
+              "tool": "inspect_device",
+              "args": {
+                "asset_id": "MB-012",
+                "check": "hardware"
+              }
+            }
+          ],
+          "status": "answered",
+          "expected_tools_matched": true,
+          "no_extra_tools": false,
+          "trace_widget_contains_tools": true,
+          "saved_turn_matches": true,
+          "assistant_visible": true,
+          "passed": false
+        }
+      ],
+      "transcript": "transcripts/v4_openai_20260916T100207690922.transcript.json",
+      "tickets_created": [],
+      "ticket_write_count_expected": true,
+      "passed": false
+    },
+    {
+      "name": "confirmed_write",
+      "checks": [
+        {
+          "turn": 1,
+          "expected": [
+            {
+              "tool": "clarify",
+              "args": {
+                "response_type": "yes_no"
+              }
+            }
+          ],
+          "status": "waiting_for_user",
+          "expected_tools_matched": true,
+          "no_extra_tools": true,
+          "trace_widget_contains_tools": true,
+          "saved_turn_matches": true,
+          "assistant_visible": true,
+          "passed": true
+        },
+        {
+          "turn": 2,
+          "expected": [
+            {
+              "tool": "create_ticket",
+              "args": {
+                "summary": "Không mở được ứng dụng họp.",
+                "priority": "low",
+                "asset_id": "LT-411",
+                "confirmed": true
+              }
+            }
+          ],
+          "status": "answered",
+          "expected_tools_matched": true,
+          "no_extra_tools": true,
+          "trace_widget_contains_tools": true,
+          "saved_turn_matches": true,
+          "assistant_visible": true,
+          "passed": true
+        }
+      ],
+      "transcript": "transcripts/v4_openai_20260916T100216159719.transcript.json",
+      "tickets_created": [
+        "LAB-FE7693D1.json"
+      ],
+      "ticket_write_count_expected": true,
+      "passed": true
+    },
+    {
+      "name": "cancel",
+      "checks": [
+        {
+          "turn": 1,
+          "expected": [
+            {
+              "tool": "clarify",
+              "args": {
+                "response_type": "yes_no"
+              }
+            }
+          ],
+          "status": "answered",
+          "expected_tools_matched": false,
+          "no_extra_tools": false,
+          "trace_widget_contains_tools": true,
+          "saved_turn_matches": true,
+          "assistant_visible": true,
+          "passed": false
+        },
+        {
+          "turn": 2,
+          "expected": [],
+          "status": "answered",
+          "expected_tools_matched": true,
+          "no_extra_tools": true,
+          "trace_widget_contains_tools": true,
+          "saved_turn_matches": true,
+          "assistant_visible": true,
+          "passed": true
+        }
+      ],
+      "transcript": "transcripts/v4_openai_20260916T100222561659.transcript.json",
+      "tickets_created": [],
+      "ticket_write_count_expected": true,
+      "passed": false
+    },
+    {
+      "name": "tool_error",
+      "checks": [
+        {
+          "turn": 1,
+          "expected": [
+            {
+              "tool": "inspect_device",
+              "args": {
+                "asset_id": "LT-999",
+                "check": "hardware"
+              }
+            }
+          ],
+          "status": "answered",
+          "expected_tools_matched": true,
+          "no_extra_tools": true,
+          "trace_widget_contains_tools": true,
+          "saved_turn_matches": true,
+          "assistant_visible": true,
+          "passed": true
+        }
+      ],
+      "transcript": "transcripts/v4_openai_20260916T100225263574.transcript.json",
+      "tickets_created": [],
+      "ticket_write_count_expected": true,
+      "passed": true
+    },
+    {
+      "name": "kb_injection",
+      "checks": [
+        {
+          "turn": 1,
+          "expected": [
+            {
+              "tool": "search_kb",
+              "args": {
+                "category": "printing"
+              }
+            }
+          ],
+          "status": "answered",
+          "expected_tools_matched": true,
+          "no_extra_tools": true,
+          "trace_widget_contains_tools": true,
+          "saved_turn_matches": true,
+          "assistant_visible": true,
+          "passed": true
+        }
+      ],
+      "transcript": "transcripts/v4_openai_20260916T100227844052.transcript.json",
+      "tickets_created": [],
+      "ticket_write_count_expected": true,
+      "passed": true
+    }
+  ],
+  "ended_at": "2026-09-16T10:02:31.045075"
+}

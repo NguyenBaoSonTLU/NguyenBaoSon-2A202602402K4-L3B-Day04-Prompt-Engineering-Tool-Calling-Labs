@@ -1,0 +1,26 @@
+{
+  "checked_at": "2026-09-16T10:10:22.043153",
+  "git_head_at_check": "311580e2b12f92fcd747b3533764be6ae5aaa847",
+  "branch": "main",
+  "remote": "https://github.com/HongNhung-0204/K4-L3-DAY04-HayUongNuoc-PromptEngineeringToolCalling.git",
+  "technical_checks": {
+    "registry_matches": true,
+    "arguments_match": true,
+    "group_exactly_5_plus_5": true,
+    "fixed_eval_files_unchanged": true,
+    "final_artifacts_match_v4_runs": true,
+    "final_runs_fully_measured": true,
+    "no_forbidden_git_files": true,
+    "no_detected_real_keys": true,
+    "python_syntax_ok": true
+  },
+  "forbidden_files": [],
+  "secret_file_paths_only": [],
+  "syntax_errors": [],
+  "secret_scan_scope": "Git tracked + eligible untracked text; compare configured API key/token values and OpenAI-like key pattern. Synthetic adversarial fixtures are not real credentials. Not a guarantee against every possible secret format.",
+  "human_items_pending": [
+    "Confirmed member names, student IDs, roles and individual reflections",
+    "Original v1/v2 hypothesis notes or snapshots",
+    "Repository naming/access, applicable deadline and VLearn submission confirmation"
+  ]
+}

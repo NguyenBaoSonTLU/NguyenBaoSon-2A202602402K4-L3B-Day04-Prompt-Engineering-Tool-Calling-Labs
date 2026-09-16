@@ -90,7 +90,17 @@ def run_model_tool_loop(
     all_tool_events: list[dict[str, Any]] = []
 
     for round_index in range(1, max_tool_rounds + 1):
-        response = provider.complete(working_messages, tools, model=model, temperature=0.0)
+        try:
+            response = provider.complete(working_messages, tools, model=model, temperature=0.0)
+        except Exception as exc:
+            # Keep evidence of tools that already ran, especially writes, even
+            # when the provider fails while composing the final response.
+            error = f"{type(exc).__name__}: {exc}"
+            return {
+                "status": "provider_error", "error": error,
+                "assistant_text": f"Provider error: {error}",
+                "rounds": rounds, "tool_events": all_tool_events,
+            }
         calls = response.tool_calls
         round_record: dict[str, Any] = {
             "round": round_index,
@@ -234,8 +244,9 @@ def main() -> None:
             turn_record.update(result)
             assistant_text = result["assistant_text"]
             print(f"\nAgent> {assistant_text}")
-            history.append({"role": "user", "content": user_text})
-            history.append({"role": "assistant", "content": assistant_text})
+            if result["status"] != "provider_error":
+                history.append({"role": "user", "content": user_text})
+                history.append({"role": "assistant", "content": assistant_text})
         except Exception as exc:
             turn_record.update({
                 "status": "provider_error",

@@ -1,7 +1,121 @@
 {
   "dataset_id": "day04_v3_helpdesk_group",
   "dataset_role": "group",
-  "description": "Template intentionally left empty. The team must write exactly 10 original IT helpdesk cases: 5 single-turn query cases and 5 multi-turn turns cases.",
+  "description": "Bộ kiểm tra IT Helpdesk tự viết gồm đúng 5 case một lượt và 5 case nhiều lượt. Kiểm tra định tuyến, tham số, thông tin thiếu, phạm vi hỗ trợ, sửa yêu cầu, xác nhận và hủy ticket. Với case nhiều lượt, expect áp dụng cho lượt cuối theo cơ chế run_eval.py.",
   "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "cases": [
+    {
+      "id": "G01_printing_guide",
+      "phase": "B",
+      "suite": "group",
+      "query": "Mình cần tìm bài hướng dẫn xử lý hàng đợi in bị kẹt trên Windows. Chỉ tìm tài liệu, chưa kiểm tra máy hay tạo ticket.",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "search_kb", "args": {"category": "printing"}}]},
+      "metadata": {"skill": "printing_guide_routing", "difficulty": "medium", "what_it_tests": "Dùng search_kb với category printing; query phải thể hiện hàng đợi in Windows. Không gọi status, inspect hoặc create_ticket. Nội dung query được xem thủ công vì có nhiều cách diễn đạt hợp lệ."}
+    },
+    {
+      "id": "G02_software_scope",
+      "phase": "B",
+      "suite": "group",
+      "query": "Liệt kê phần mềm và phiên bản đã cài trên LT-411 giúp mình; chỉ kiểm tra software, không cần quét toàn bộ máy.",
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "inspect_device", "args": {"asset_id": "LT-411", "check": "software"}}]},
+      "metadata": {"skill": "narrow_software_diagnostic", "difficulty": "medium", "what_it_tests": "Trích đúng asset và giới hạn check=software, không dùng all hay hardware."}
+    },
+    {
+      "id": "G03_missing_ticket_summary",
+      "phase": "B",
+      "suite": "group",
+      "query": "Tạo ticket mức low cho máy MB-012. Mình chưa mô tả sự cố; hãy hỏi mình nội dung lỗi trước khi soạn ticket.",
+      "failure_type": "missing_info",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "text"}}]},
+      "metadata": {"skill": "clarify_ticket_summary", "difficulty": "medium", "what_it_tests": "Thiếu summary thì hỏi mô tả lỗi, không tự bịa nội dung hoặc tạo ticket. Kiểm tra thủ công câu hỏi có nhắm vào thông tin còn thiếu."}
+    },
+    {
+      "id": "G04_two_shared_services",
+      "phase": "B",
+      "suite": "group",
+      "query": "Kiểm tra trạng thái hai dịch vụ SSO và printing trên production. Mình chỉ cần trạng thái dịch vụ dùng chung.",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [
+        {"name": "check_service_status", "args": {"service": "sso", "environment": "production"}},
+        {"name": "check_service_status", "args": {"service": "printing", "environment": "production"}}
+      ]},
+      "metadata": {"skill": "two_distinct_services", "difficulty": "hard", "what_it_tests": "Gọi status riêng cho cả SSO và printing; không bỏ sót dịch vụ, gộp enum hoặc chẩn đoán thiết bị."}
+    },
+    {
+      "id": "G05_out_of_scope_marketing",
+      "phase": "B",
+      "suite": "group",
+      "query": "Viết giúp mình bài quảng cáo 300 chữ để bán cà phê rang xay trên mạng xã hội.",
+      "failure_type": "out_of_scope",
+      "expect": {"no_tool": true, "behavior": "refuse"},
+      "metadata": {"skill": "decline_marketing_request", "difficulty": "easy", "what_it_tests": "Không gọi công cụ cho yêu cầu ngoài IT Helpdesk. Xem thủ công câu trả lời để xác nhận agent từ chối phù hợp; no_tool chỉ chấm việc không gọi tool."}
+    },
+    {
+      "id": "G06_environment_correction",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Mình muốn kiểm tra dịch vụ SSO trên production."},
+        {"role": "user", "content": "Sửa lại môi trường thành staging, vẫn giữ dịch vụ đó."},
+        {"role": "user", "content": "Bây giờ kiểm tra đúng môi trường vừa sửa, không kiểm tra môi trường cũ."}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "check_service_status", "args": {"service": "sso", "environment": "staging"}}]},
+      "metadata": {"skill": "replace_environment_keep_service", "difficulty": "hard", "what_it_tests": "Giữ service=sso từ ngữ cảnh và thay production bằng staging; không gọi thêm môi trường cũ."}
+    },
+    {
+      "id": "G07_scope_correction_keep_asset",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Mình muốn kiểm tra toàn bộ máy MB-012."},
+        {"role": "user", "content": "Thu hẹp lại: chỉ xem tình trạng pin và phần cứng thôi."},
+        {"role": "user", "content": "Thực hiện phạm vi vừa chốt trên máy đó nhé."}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "inspect_device", "args": {"asset_id": "MB-012", "check": "hardware"}}]},
+      "metadata": {"skill": "replace_scope_keep_asset", "difficulty": "hard", "what_it_tests": "Giữ asset MB-012 nhưng thay check=all bằng hardware theo yêu cầu mới nhất."}
+    },
+    {
+      "id": "G08_confirm_exact_ticket",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Soạn ticket cho LT-411, mức low, với summary chính xác là: Không mở được ứng dụng họp."},
+        {"role": "assistant", "content": "Bạn xác nhận tạo ticket với summary 'Không mở được ứng dụng họp.', priority low và asset_id LT-411 chứ?"},
+        {"role": "user", "content": "Tôi xác nhận tạo ticket với đúng các thông tin vừa nêu, không thay đổi gì."}
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {"tool_calls": [{"name": "create_ticket", "args": {"summary": "Không mở được ứng dụng họp.", "priority": "low", "asset_id": "LT-411", "confirmed": true}}]},
+      "metadata": {"skill": "execute_after_exact_confirmation", "difficulty": "hard", "what_it_tests": "Sau khi xác nhận payload cụ thể, gọi create_ticket đúng dữ liệu với confirmed=true, không hỏi lại. Khi chạy eval, tool tạo ticket giả lập cục bộ; kiểm tra result.status=created trước khi coi là thành công."}
+    },
+    {
+      "id": "G09_changed_asset_invalidates_confirmation",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "assistant", "content": "Xác nhận tạo ticket summary 'Không mở được ứng dụng họp.', priority low, asset_id LT-411?"},
+        {"role": "user", "content": "Tôi xác nhận các thông tin đó."},
+        {"role": "user", "content": "Khoan thực hiện: đổi máy thành MB-012, giữ nguyên summary và mức low. Hãy hỏi tôi xác nhận lại bản mới trước khi tạo."}
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "yes_no"}}]},
+      "metadata": {"skill": "asset_change_requires_reconfirmation", "difficulty": "hard", "what_it_tests": "Đổi asset làm xác nhận cũ hết hiệu lực. Chỉ hỏi xác nhận mới, không create_ticket. Kiểm tra thủ công câu hỏi giữ summary, low và dùng MB-012."}
+    },
+    {
+      "id": "G10_cancel_ticket_keep_read_request",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Soạn ticket mức medium cho sự cố phần mềm trên LT-411 và tra tài khoản EMP-1006 giúp mình."},
+        {"role": "user", "content": "Hủy phần tạo ticket, không ghi dữ liệu gì cả. Yêu cầu tra tài khoản vẫn giữ nguyên."},
+        {"role": "user", "content": "Bây giờ chỉ tra trạng thái tài khoản và danh sách thiết bị được cấp cho nhân viên vừa nêu, không chẩn đoán thiết bị."}
+      ],
+      "failure_type": "unnecessary_tool",
+      "expect": {"tool_calls": [{"name": "lookup_user", "args": {"employee_id": "EMP-1006"}}]},
+      "metadata": {"skill": "partial_cancel_preserves_read", "difficulty": "hard", "what_it_tests": "Hủy write action nhưng giữ read action. Chỉ lookup_user; không tạo ticket, hỏi xác nhận ticket hoặc inspect thiết bị được cấp."}
+    }
+  ]
 }

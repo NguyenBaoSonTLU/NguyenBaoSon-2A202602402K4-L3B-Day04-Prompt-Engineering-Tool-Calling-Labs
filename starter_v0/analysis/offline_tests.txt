@@ -1,0 +1,13 @@
+Command: python starter_v0/scripts/test_submission.py
+Offline regression tests; not model evidence.
+[tool] inspect_device({"asset_id": "LT-411", "check": "software"})
+test_external_identifier_rejected_before_http (__main__.SubmissionChecks.test_external_identifier_rejected_before_http) ... ok
+test_provider_error_preserves_completed_tool_evidence (__main__.SubmissionChecks.test_provider_error_preserves_completed_tool_evidence) ... ok
+test_registry_and_group_contract (__main__.SubmissionChecks.test_registry_and_group_contract) ... ok
+test_retrieval_separates_instruction_text (__main__.SubmissionChecks.test_retrieval_separates_instruction_text) ... ok
+test_ticket_guard_blocks_unconfirmed_and_sensitive_writes (__main__.SubmissionChecks.test_ticket_guard_blocks_unconfirmed_and_sensitive_writes) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.017s
+
+OK
